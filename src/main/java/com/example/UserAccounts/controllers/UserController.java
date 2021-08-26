@@ -1,15 +1,11 @@
 package com.example.UserAccounts.controllers;
 
 
-
 import com.example.UserAccounts.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 @RestController
@@ -21,21 +17,22 @@ public class UserController {
     private final UserService userService;
 
 
-
     //ДОБАВЛЯЕМ ПОЛЬЗОВАТЕЛЯ
-    @PostMapping(path = "/users/", consumes = "application/json")
+    @PostMapping(path = "/users/add/", consumes = "application/json")
     public void add() {
         userService.add();
 
     }
-  //МЕНЯЕМ ДАННЫЕ ПОЛЬЗОВАТЕЛЯ
-    @PutMapping("/users/")
+
+    //МЕНЯЕМ ДАННЫЕ ПОЛЬЗОВАТЕЛЯ
+    @PutMapping("/users/update/")
     public void update() {
         userService.update();
     }
+
     //БЛОКИРУЕМ ПОЛЬЗОВАТЕЛЯ
-//    @PutMapping("/users/")
-//    public void blocked() {
-//
-//    }
+    @PutMapping("/users/blocked/")
+    public void blocked() {
+        userService.blocked();
+    }
 }

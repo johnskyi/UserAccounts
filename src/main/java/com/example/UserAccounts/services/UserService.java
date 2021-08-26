@@ -20,8 +20,6 @@ import java.util.*;
 @AllArgsConstructor
 public class UserService {
 
-
-
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     @Autowired
@@ -29,14 +27,14 @@ public class UserService {
 
     //ДОБАВЛЯЕМ ПОЛЬЗОВАТЕЛЯ
     public ResponseEntity<UserEntity> add() {
-        Map<String, String> userMap = parseJson();
+        Map<String, String> userMap = parseJson(); // Входной json
         UserEntity user = UserEntity.builder()
                 .name(userMap.get("name"))
                 .post(userMap.get("post"))
                 .passWord(userMap.get("passWord"))
                 .build();
         userRepo.save(user);
-        answerCreate(user);
+        inCreate(user); //Выходной json
 
         return ResponseEntity.ok(userRepo.findById(user.getId()).get());
 
@@ -45,9 +43,11 @@ public class UserService {
     //МЕНЯЕМ ДАННЫЕ ПОЛЬЗОВАТЕЛЯ
     public ResponseEntity<UserEntity> update() {
 
-        Map<String, String> userMap = parseJson();
+        Map<String, String> userMap = parseJson(); // Входной json
 
-        Optional<UserEntity> userOptional = userRepo.findById(Integer.parseInt(userMap.get("id")));
+        int id = Integer.parseInt(String.valueOf(userMap.get("id")));
+
+        Optional<UserEntity> userOptional = userRepo.findById(id);
         if (userOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
@@ -57,11 +57,18 @@ public class UserService {
 
         userRepo.save(userOptional.get());
 
-        return ResponseEntity.ok(userRepo.findById(Integer.parseInt(userMap.get("id"))).get());
+        inCreate(userOptional.get()); //Выходной json
+
+        return ResponseEntity.ok(userOptional.get());
     }
 
     //БЛОКИРУЕМ ПОЛЬЗОВАТЕЛЯ
-    public ResponseEntity<UserEntity> blocked(int id, String type, boolean isBlocked) {
+    public ResponseEntity<UserEntity> blocked() {
+
+        Map<String, String> userMap = parseJson(); // Входной json
+
+        int id = Integer.parseInt(String.valueOf(userMap.get("id")));
+
 
         Optional<UserEntity> userOptional = userRepo.findById(id);
         if (userOptional.isEmpty()) {
@@ -70,6 +77,9 @@ public class UserService {
         userOptional.get().setBlocked(true);
 
         userRepo.save(userOptional.get());
+
+        inCreate(userOptional.get()); //Выходной json
+
         return ResponseEntity.ok(userOptional.get());
     }
 
@@ -77,7 +87,7 @@ public class UserService {
     public static Map<String, String> parseJson() {
         Map<String, String> userMap = new HashMap<>();
         try {
-            FileReader reader = new FileReader("src/main/resources/users.json");
+            FileReader reader = new FileReader("src/main/resources/jsonTest/in.json");
             JSONParser jsonParser = new JSONParser();
             JSONObject jsonObject = (JSONObject) jsonParser.parse(reader);
             userMap = (Map<String, String>) jsonObject;
@@ -88,8 +98,8 @@ public class UserService {
         return userMap;
     }
 
-    private static void answerCreate(UserEntity user) {
-        try (FileWriter file = new FileWriter("src/main/resources/answer.json")) {
+    private static void inCreate(UserEntity user) {
+        try (FileWriter file = new FileWriter("src/main/resources/jsonTest/out.json")) {
             file.write(GSON.toJson(user));
         } catch (Exception e) {
             e.printStackTrace();
