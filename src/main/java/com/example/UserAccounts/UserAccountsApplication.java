@@ -1,5 +1,6 @@
 package com.example.UserAccounts;
 
+import com.example.UserAccounts.services.UserService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
