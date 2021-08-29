@@ -26,9 +26,15 @@ public class UserController {
         return messageMap;
     }
 
+
+    @RequestMapping(value = "/", method = RequestMethod.PUT, consumes = "application/json", produces = "application/json")
+    public void startService(String message) {
+        setMessage(message);
+        changeMethod(String.valueOf(getMessageMap().get("type")));
+    }
+
     //ПОЛУЧАЕМ СООБЩЕНИЕ ОТ СЛУШАТЕЛЯ
-    @RequestMapping("/")
-    public void setMessage(String message) {
+    private void setMessage(String message) {
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = null;
         try {
@@ -39,24 +45,20 @@ public class UserController {
         Map<String, String> map = (Map<String, String>) jsonObject;
 
         this.messageMap = map;
-    }
-
-    //ДОБАВЛЯЕМ ПОЛЬЗОВАТЕЛЯ
-    @PostMapping(path = "/users/add/", consumes = "application/json")
-    public void add() {
-        userService.add(getMessageMap());
 
     }
 
-    //МЕНЯЕМ ДАННЫЕ ПОЛЬЗОВАТЕЛЯ
-    @PutMapping("/users/update/")
-    public void update() {
-        userService.update(getMessageMap());
+    //ВЫБИРАЕМ НУЖНЫЙ МЕТОД В ЗАВИСИМОСТИ ОТ ВХОДНОГО TYPE
+    private void changeMethod(String type) {
+        if (type.equals("1")) {
+            userService.add(getMessageMap());
+        }
+        if (type.equals("3")) {
+            userService.update(getMessageMap());
+        }
+        if (type.equals("2")) {
+            userService.blocked(getMessageMap());
+        }
     }
 
-    //БЛОКИРУЕМ ПОЛЬЗОВАТЕЛЯ
-    @PutMapping("/users/blocked/")
-    public void blocked() {
-        userService.blocked(getMessageMap());
-    }
 }

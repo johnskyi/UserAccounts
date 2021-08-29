@@ -15,8 +15,7 @@ public class RabbitConsumer {
     private final UserController userController;
 
     @RabbitListener(queues = "myQueue")
-    public void process2(String message)
-    {
-        userController.setMessage(message);
+    public void process2(String message) {
+        userController.startService(message);
     }
 }
