@@ -1,31 +1,22 @@
 package com.example.UserAccounts.rabbitMQ;
 
+import com.example.UserAccounts.controllers.UserController;
+import lombok.AllArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @EnableRabbit
 @Component
+@AllArgsConstructor
 public class RabbitConsumer {
 
-    @RabbitListener(bindings =
-    @QueueBinding(
-            value = @Queue(value = "myQueue"),
-            exchange = @Exchange(value = "myExchange")
-    )
-    )
-    public void process(String message)
-    {
-        System.out.println("Сообщение получено!");
-    }
-    @RabbitListener(bindings =
-    @QueueBinding(
-            value = @Queue(value = "anyQueue"),
-            exchange = @Exchange(value = "anyExchange")
-    )
-    )
+    @Autowired
+    private final UserController userController;
+
+    @RabbitListener(queues = "myQueue")
     public void process2(String message)
     {
-        System.out.println("Читаем выходное сообщение");
-        System.out.println(message);
+        userController.setMessage(message);
     }
 }

@@ -36,26 +36,6 @@ public class RabbitConfiguration {
     {
         return new Queue("anyQueue");
     }
-    @Bean
-    public FanoutExchange fanoutExchange()
-    {
-        return new FanoutExchange("myExchange");
-    }
-    @Bean
-    public FanoutExchange fanoutExchange2()
-    {
-        return new FanoutExchange("anyExchange");
-    }
-    @Bean
-    public Binding binding()
-    {
-        return BindingBuilder.bind(myQueue()).to(fanoutExchange());
-    }
-    @Bean
-    public Binding binding2()
-    {
-        return BindingBuilder.bind(anyQueue()).to(fanoutExchange2());
-    }
 
 
 }
