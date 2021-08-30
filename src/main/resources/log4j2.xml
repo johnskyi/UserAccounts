@@ -1,0 +1,35 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="WARN">
+    <appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        <File name="Add" fileName="logs/add.log" immediateFlush="true">
+            <PatternLayout pattern="%d{yyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <Filters>
+                <MarkerFilter marker="ADD_HISTORY" />
+            </Filters>
+        </File>
+        <File name="Update" fileName="logs/update.log" immediateFlush="true">
+            <PatternLayout pattern="%d{yyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <Filters>
+                <MarkerFilter marker="UPDATE_USER" />
+            </Filters>
+        </File>
+        <File name="Blocked" fileName="logs/blocked.log" immediateFlush="true">
+            <PatternLayout pattern="%d{yyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <Filters>
+                <MarkerFilter marker="BLOCKED_USER" />
+            </Filters>
+        </File>
+    </appenders>
+    <loggers>
+        <root level="ALL">
+            <appender-ref ref="Add"/>
+            <appender-ref ref="Update"/>
+            <appender-ref ref="Blocked"/>
+        </root>
+    </loggers>
+
+</configuration>
