@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+
+  db:
+    image: 'postgres:13.1-alpine'
+    container_name: userAccountPostgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=johnskyi
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_DB=postgres
+
+  rabbitmq:
+    image: 'rabbitmq:3.6-management-alpine'
+    container_name: userAccountRabbit
+    ports:
+      - 5672:5672
+      - 15672:15672
